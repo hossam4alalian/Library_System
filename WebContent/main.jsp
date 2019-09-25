@@ -50,6 +50,17 @@
          <input type = "submit" name= "submit" value = "Borrow DVD" />
      </form>
      
+     <h1>Add Users</h1>
+     
+     <form action = "servlet" method = "POST">
+     	First name: <input type = "text" name = "borrowsnum" /><br />
+        Last name: <input type = "text" name = "dvdsnum" /><br />
+        Personal number: <input type = "text" name = "dvdsnum" /><br />
+         <input type = "submit" name= "submit" value = "Add user" />
+     </form>
+     
+     <h1>Borrowed Media</h1>
+     
      
 </body>
 </html>

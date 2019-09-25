@@ -45,7 +45,6 @@ public class servlet extends HttpServlet {
 		borrowMedia(request, response);
 		
 		doGet(request, response);
-		
 	}
 	
 	public void addMedia(HttpServletRequest request, HttpServletResponse response)  throws ServletException, IOException {
@@ -99,44 +98,95 @@ public class servlet extends HttpServlet {
 	public void borrowMedia(HttpServletRequest request, HttpServletResponse response)  throws ServletException, IOException {
 		database db=new database("localhost", "root", "","pär");
 		
+		
+		//det här för att låna en bok.
 		if(request.getParameter("submit").equals("Borrow book")) {
 			String borrowsnum,bsname;
-			Object[][]bookData = db.getData("select * from böcker");
-			Object[][]userData = db.getData("select * from användare");
-			
 			borrowsnum= request.getParameter("borrowsnum");
 			bsname= request.getParameter("booksnum");
 			
-			for(int i=0;i<userData.length;i++) {
-				
-				String personNummer = userData[i][3].toString();
-				
-				for(int ii=0;ii<bookData.length;ii++) {
-
-					String sNummer = bookData[ii][2].toString();
-					
+			Object[][]bookData = db.getData("select * from böcker WHERE serialNummer= "+bsname+"");
+			Object[][]userData = db.getData("select * from användare WHERE personNummer="+borrowsnum+"");
+			
 					try {
-						System.out.println(borrowsnum+"   "+personNummer+"    "+sNummer+"    "+ bsname);
-						if(personNummer.equals(borrowsnum) && sNummer.equals(bsname)) {
-							String SQL=String.format("INSERT INTO lånadeböcker(mediaID,användareID,datumn) "+"VALUES ('%s','%s','%s');",sNummer,personNummer,"2019-05-07*");
+						if(userData.length==1 &&bookData.length==1) {
+							String SQL=String.format("INSERT INTO lånadeböcker(mediaID,användareID,datumn) "+"VALUES ('%s','%s','%s');",bookData[0][2],userData[0][3],"2019-05-07*");
 							try {
 								db.execute(SQL);
 							} catch (SQLException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
-							}
-							
+							}	
 						}
 						else {
-							System.out.println("book or user doesn't seem to be registered");
+							System.out.println("media or user doesn't seem to be registered");
 						}
 					}
 					catch (Exception missfall) {
 						System.out.println("Error"+ missfall);
 					}
-				}
-			}
+					response.sendRedirect(request.getContextPath() + "/main.jsp");
 		}
+		
+		if(request.getParameter("submit").equals("Borrow CD")) {
+			String borrowsnum,bsname;
+			borrowsnum= request.getParameter("borrowsnum");
+			bsname= request.getParameter("cdsnum");
+			
+			Object[][]cdData = db.getData("select * from cd WHERE serialNummer= "+bsname+"");
+			Object[][]userData = db.getData("select * from användare WHERE personNummer="+borrowsnum+"");
+			
+					try {
+						if(userData.length==1  &&cdData.length==1) {
+							String SQL=String.format("INSERT INTO lånadecd(mediaID,användareID,datumn) "+"VALUES ('%s','%s','%s');",cdData[0][2],userData[0][3],"2019-05-07*");
+							try {
+								db.execute(SQL);
+							} catch (SQLException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}	
+						}
+						else {
+							System.out.println("media or user doesn't seem to be registered");
+						}
+					}
+					catch (Exception missfall) {
+						System.out.println("Error"+ missfall);
+					}
+					response.sendRedirect(request.getContextPath() + "/main.jsp");
+		}
+		
+		if(request.getParameter("submit").equals("Borrow DVD")) {
+			String borrowsnum,bsname;
+			borrowsnum= request.getParameter("borrowsnum");
+			bsname= request.getParameter("dvdsnum");
+			
+			Object[][]dvdData = db.getData("select * from dvd WHERE serialNummer= "+bsname+"");
+			Object[][]userData = db.getData("select * from användare WHERE personNummer="+borrowsnum+"");
+			
+					try {
+						if(userData.length==1  &&dvdData.length==1) {
+							String SQL=String.format("INSERT INTO lånadedvd(mediaID,användareID,datumn) "+"VALUES ('%s','%s','%s');",dvdData[0][2],userData[0][3],"2019-05-07*");
+							try {
+								db.execute(SQL);
+							} catch (SQLException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}	
+						}
+						else {
+							System.out.println("media or user doesn't seem to be registered");
+						}
+					}
+					catch (Exception missfall) {
+						System.out.println("Error"+ missfall);
+					}
+					response.sendRedirect(request.getContextPath() + "/main.jsp");
+		}
+			
+	}
+	
+	public void addUsers() {
 		
 	}
 

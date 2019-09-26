@@ -45,6 +45,7 @@ public class servlet extends HttpServlet {
 		addMedia(request, response);
 		borrowMedia(request, response);
 		addUsers(request, response);
+		borrowed(request, response);
 		
 		doGet(request, response);
 	}
@@ -99,7 +100,7 @@ public class servlet extends HttpServlet {
 	
 	public void borrowMedia(HttpServletRequest request, HttpServletResponse response)  throws ServletException, IOException {
 		database db=new database("localhost", "root", "","pär");
-		PrintWriter out = response.getWriter();
+		
 		request.getSession().removeAttribute("errorMessage");
 		request.getSession().removeAttribute("errorMessage2");
 		request.getSession().removeAttribute("errorMessage3");
@@ -220,6 +221,56 @@ public class servlet extends HttpServlet {
 		LocalDateTime now = LocalDateTime.now();  
 		
 		return dtf.format(now); 
+	}
+	
+	public void borrowed(HttpServletRequest request, HttpServletResponse response)  throws ServletException, IOException {
+		database db=new database("localhost", "root", "","pär");
+		PrintWriter out = response.getWriter();
+		
+		Object[][]lånadeböcker = db.getData("select * from lånadeböcker");
+		Object[][]lånadecd = db.getData("select * from lånadecd");
+		Object[][]lånadedvd = db.getData("select * from lånadedvd");
+		
+		Object[][]böcker = db.getData("select * from böcker");
+		Object[][]cd = db.getData("select * from cd");
+		Object[][]dvd = db.getData("select * from dvd");
+		
+		request.getSession().removeAttribute("borrowedBooks");
+		request.getSession().removeAttribute("borrowedCD");
+		request.getSession().removeAttribute("borrowedDVD");
+		
+		if(request.getParameter("submit").equals("Show Borrowed Media")) {
+			for(int i=0; i<lånadeböcker.length; i++) {
+				for(int ii=0; ii<böcker.length; ii++) {
+					if(lånadeböcker[i][1].equals(böcker[ii][2])) {
+						
+						out.println("Book: "+böcker[ii][1]);
+					}
+				}
+			}
+			for(int i=0; i<lånadecd.length; i++) {
+				for(int ii=0; ii<cd.length; ii++) {
+					if(lånadecd[i][1].equals(cd[ii][2])) {
+						
+						out.println("CD: "+cd[ii][1]);
+					}
+				}
+			}
+			for(int i=0; i<lånadedvd.length; i++) {
+				for(int ii=0; ii<dvd.length; ii++) {
+					if(lånadedvd[i][1].equals(dvd[ii][2])) {
+						
+						out.println("DVD: "+dvd[ii][1]);
+					}
+				}
+			}
+			
+			
+		}
+		
+		
+
+		
 	}
 
 }

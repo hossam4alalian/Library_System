@@ -66,10 +66,12 @@
      <h1>Borrowed Media</h1>
      
      
-     
-     
-     
-     
+     <form action = "servlet" method = "POST">
+     	
+         <input type = "submit" name= "submit" value = "Show Borrowed Media" />
+          
+          
+     </form>
      
      
      
@@ -84,6 +86,8 @@
                 }
                 
             }
+            
+            
             
        </script>
      

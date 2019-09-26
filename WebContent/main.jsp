@@ -13,6 +13,7 @@
          <br />
          Book's serial number: <input type = "text" name = "bsnum" maxlength = "11"  onkeypress="isInputNumber(event)"/><br />
          <input type = "submit" name= "submit" value = "Add book" />
+         <div style="color: #FF0000;">${bookerror}</div>
      </form>
      <br /><br />
      <form action = "servlet" method = "POST">
@@ -20,6 +21,7 @@
          <br />
          CD's serial number: <input type = "text" name = "csnum" maxlength = "11" onkeypress="isInputNumber(event)"/><br />
          <input type = "submit" name= "submit" value = "Add CD" />
+         <div style="color: #FF0000;">${cderror}</div>
      </form>
      <br /><br />
      <form action = "servlet" method = "POST">
@@ -27,6 +29,7 @@
          <br />
          DVD's serial number: <input type = "text" name = "dsnum" maxlength = "11" onkeypress="isInputNumber(event)"/><br />
          <input type = "submit" name= "submit" value = "Add DVD" />
+         <div style="color: #FF0000;">${dvderror}</div>
      </form>
      
      
@@ -61,6 +64,7 @@
         Last name: <input type = "text" name = "ename" /><br />
         Personal number: <input type = "text" name = "pnum" maxlength = "10" onkeypress="isInputNumber(event)"/><br />
          <input type = "submit" name= "submit" value = "Add user" />
+         <div style="color: #FF0000;">${usererror}</div>
      </form>
      
      <h1>Borrowed Media</h1>

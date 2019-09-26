@@ -52,19 +52,35 @@ public class servlet extends HttpServlet {
 	
 	public void addMedia(HttpServletRequest request, HttpServletResponse response)  throws ServletException, IOException {
 		database db=new database("localhost", "root", "","pär");
+		
+		request.getSession().removeAttribute("bookerror");
+		request.getSession().removeAttribute("cderror");
+		request.getSession().removeAttribute("dvderror");
+		
 		if(request.getParameter("submit").equals("Add book")) {
 			String name, snum;
 			name=request.getParameter("bname");
 			snum= request.getParameter("bsnum");
 			
-			String SQL=String.format("INSERT INTO böcker(namn,serialNummer) "+"VALUES ('%s','%s');",name,snum);
-			try {
-				db.execute(SQL);
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			Object[][]bookData = db.getData("select * from böcker WHERE serialNummer="+snum+"");
+			
+			if(bookData.length==0) {
+				String SQL=String.format("INSERT INTO böcker(namn,serialNummer) "+"VALUES ('%s','%s');",name,snum);
+				try {
+					db.execute(SQL);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				request.getSession().removeAttribute("bookerror");
+				response.sendRedirect(request.getContextPath() + "/main.jsp");
 			}
-			response.sendRedirect(request.getContextPath() + "/main.jsp");
+			else {
+				response.sendRedirect(request.getContextPath() + "/main.jsp");
+				request.getSession().setAttribute("bookerror", "Book is already registered");
+			}
+			
+
 		}
 		
 		if(request.getParameter("submit").equals("Add CD")) {
@@ -72,14 +88,25 @@ public class servlet extends HttpServlet {
 			name=request.getParameter("cname");
 			snum= request.getParameter("csnum");
 			
-			String SQL=String.format("INSERT INTO cd(namn,serialNummer) "+"VALUES ('%s','%s');",name,snum);
-			try {
-				db.execute(SQL);
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			Object[][]cdData = db.getData("select * from cd WHERE serialNummer="+snum+"");
+
+			if(cdData.length==0) {
+				String SQL=String.format("INSERT INTO cd(namn,serialNummer) "+"VALUES ('%s','%s');",name,snum);
+				try {
+					db.execute(SQL);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				request.getSession().removeAttribute("cderror");
+				response.sendRedirect(request.getContextPath() + "/main.jsp");
 			}
-			response.sendRedirect(request.getContextPath() + "/main.jsp");
+			else {
+				response.sendRedirect(request.getContextPath() + "/main.jsp");
+				request.getSession().setAttribute("cderror", "CD is already registered");
+			
+			}
+			
 		}
 		
 		if(request.getParameter("submit").equals("Add DVD")) {
@@ -87,14 +114,24 @@ public class servlet extends HttpServlet {
 			name=request.getParameter("dname");
 			snum= request.getParameter("dsnum");
 			
-			String SQL=String.format("INSERT INTO dvd(namn,serialNummer) "+"VALUES ('%s','%s');",name,snum);
-			try {
-				db.execute(SQL);
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			Object[][]dvdData = db.getData("select * from dvd WHERE serialNummer="+snum+"");
+			
+			if(dvdData.length==0) {
+				String SQL=String.format("INSERT INTO dvd(namn,serialNummer) "+"VALUES ('%s','%s');",name,snum);
+				try {
+					db.execute(SQL);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				request.getSession().removeAttribute("dvderror");
+				response.sendRedirect(request.getContextPath() + "/main.jsp");
 			}
-			response.sendRedirect(request.getContextPath() + "/main.jsp");
+			else {
+				response.sendRedirect(request.getContextPath() + "/main.jsp");
+				request.getSession().setAttribute("dvderror", "DVD is already registered");
+			}
+			
 		}
 	}
 	
@@ -104,6 +141,7 @@ public class servlet extends HttpServlet {
 		request.getSession().removeAttribute("errorMessage");
 		request.getSession().removeAttribute("errorMessage2");
 		request.getSession().removeAttribute("errorMessage3");
+		
 		//det här för att låna en bok.
 		if(request.getParameter("submit").equals("Borrow book")) {
 			String borrowsnum,mediaNum;
@@ -199,20 +237,36 @@ public class servlet extends HttpServlet {
 	
 	public void addUsers(HttpServletRequest request, HttpServletResponse response)  throws ServletException, IOException {
 		database db=new database("localhost", "root", "","pär");
+		String personNummer;
+		personNummer= request.getParameter("pnum");
+		
+		Object[][]userData = db.getData("select * from användare WHERE personNummer="+personNummer+"");
+		request.getSession().removeAttribute("usererror");
+		
+		
 		if(request.getParameter("submit").equals("Add user")) {
 			String fname, ename, pnum;
 			fname=request.getParameter("fname");
 			ename= request.getParameter("ename");
 			pnum= request.getParameter("pnum");
-			
-			String SQL=String.format("INSERT INTO användare(fnamn,enamn,personNummer) "+"VALUES ('%s','%s','%s');",fname,ename,pnum);
-			try {
-				db.execute(SQL);
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			if(userData.length!=1) {
+				String SQL=String.format("INSERT INTO användare(fnamn,enamn,personNummer) "+"VALUES ('%s','%s','%s');",fname,ename,pnum);
+				try {
+					db.execute(SQL);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				request.getSession().removeAttribute("usererror");
+				response.sendRedirect(request.getContextPath() + "/main.jsp");
 			}
-			response.sendRedirect(request.getContextPath() + "/main.jsp");
+			else {
+				response.sendRedirect(request.getContextPath() + "/main.jsp");
+				request.getSession().setAttribute("usererror", "The personal number is already used");
+			}
+			
+			
+
 		}
 	}
 	
@@ -224,6 +278,7 @@ public class servlet extends HttpServlet {
 	}
 	
 	public void borrowed(HttpServletRequest request, HttpServletResponse response)  throws ServletException, IOException {
+		response.setContentType("text/html");
 		database db=new database("localhost", "root", "","pär");
 		PrintWriter out = response.getWriter();
 		
@@ -248,7 +303,7 @@ public class servlet extends HttpServlet {
 				for(int ii=0; ii<böcker.length; ii++) {
 					for(int iii=0; iii<user.length; iii++) {
 						if(lånadeböcker[i][1].equals(böcker[ii][2]) && lånadeböcker[i][2].equals(user[iii][3])) {
-							out.println("Book: "+böcker[ii][1]+" lånades av "+ user[iii][1]+" "+user[iii][2]);
+							out.println("Book: "+böcker[ii][1]+" lånades av "+ user[iii][1]+" "+user[iii][2]+"<br><br>");
 						}
 					}
 						
@@ -259,8 +314,7 @@ public class servlet extends HttpServlet {
 				for(int ii=0; ii<cd.length; ii++) {
 					for(int iii=0; iii<user.length; iii++) {
 						if(lånadecd[i][1].equals(cd[ii][2]) && lånadecd[i][2].equals(user[iii][3])) {
-							
-							out.println("CD: "+cd[ii][1]+" lånades av "+ user[iii][1]+" "+user[iii][2]);
+							out.println("CD: "+cd[ii][1]+" lånades av "+ user[iii][1]+" "+user[iii][2]+"<br><br>");
 						}
 					}
 				}
@@ -270,19 +324,20 @@ public class servlet extends HttpServlet {
 			for(int i=0; i<lånadedvd.length; i++) {
 				for(int ii=0; ii<dvd.length; ii++) {
 					for(int iii=0; iii<user.length; iii++) {
-						if(lånadedvd[i][1].equals(dvd[ii][2])) {
-							
-							out.println("DVD: "+dvd[ii][1]+" lånades av "+ user[iii][1]+" "+user[iii][2]);
+						if(lånadedvd[i][1].equals(dvd[ii][2]) && lånadedvd[i][2].equals(user[iii][3])) {
+							out.println("DVD: "+dvd[ii][1]+" lånades av "+ user[iii][1]+" "+user[iii][2]+"<br><br>");
 						}
 					}
 				}
 			}
-			
+			out.print("<form action = \"main.jsp\">\r\n" + 
+					"     	\r\n" + 
+					"         <input type = \"submit\"  value = \"Back To Home\" />\r\n" + 
+					"          \r\n" + 
+					"          \r\n" + 
+					"     </form>");
 			
 		}
-		
-		
-
 		
 	}
 

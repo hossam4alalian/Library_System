@@ -235,32 +235,45 @@ public class servlet extends HttpServlet {
 		Object[][]cd = db.getData("select * from cd");
 		Object[][]dvd = db.getData("select * from dvd");
 		
+		Object[][]user = db.getData("select * from användare");
+		
 		request.getSession().removeAttribute("borrowedBooks");
 		request.getSession().removeAttribute("borrowedCD");
 		request.getSession().removeAttribute("borrowedDVD");
 		
+		
 		if(request.getParameter("submit").equals("Show Borrowed Media")) {
+			//för att visa lånade böcker och vem lånade dem
 			for(int i=0; i<lånadeböcker.length; i++) {
 				for(int ii=0; ii<böcker.length; ii++) {
-					if(lånadeböcker[i][1].equals(böcker[ii][2])) {
-						
-						out.println("Book: "+böcker[ii][1]);
+					for(int iii=0; iii<user.length; iii++) {
+						if(lånadeböcker[i][1].equals(böcker[ii][2]) && lånadeböcker[i][2].equals(user[iii][3])) {
+							out.println("Book: "+böcker[ii][1]+" lånades av "+ user[iii][1]+" "+user[iii][2]);
+						}
 					}
+						
 				}
 			}
+			//för att visa lånade cd och vem lånade dem
 			for(int i=0; i<lånadecd.length; i++) {
 				for(int ii=0; ii<cd.length; ii++) {
-					if(lånadecd[i][1].equals(cd[ii][2])) {
-						
-						out.println("CD: "+cd[ii][1]);
+					for(int iii=0; iii<user.length; iii++) {
+						if(lånadecd[i][1].equals(cd[ii][2]) && lånadecd[i][2].equals(user[iii][3])) {
+							
+							out.println("CD: "+cd[ii][1]+" lånades av "+ user[iii][1]+" "+user[iii][2]);
+						}
 					}
 				}
 			}
+				
+			//för att visa lånade dvd och vem lånade dem
 			for(int i=0; i<lånadedvd.length; i++) {
 				for(int ii=0; ii<dvd.length; ii++) {
-					if(lånadedvd[i][1].equals(dvd[ii][2])) {
-						
-						out.println("DVD: "+dvd[ii][1]);
+					for(int iii=0; iii<user.length; iii++) {
+						if(lånadedvd[i][1].equals(dvd[ii][2])) {
+							
+							out.println("DVD: "+dvd[ii][1]+" lånades av "+ user[iii][1]+" "+user[iii][2]);
+						}
 					}
 				}
 			}

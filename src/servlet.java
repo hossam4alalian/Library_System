@@ -63,24 +63,19 @@ public class servlet extends HttpServlet {
 			
 			Object[][]users = db.getData("select * from användare");
 			
-			
 			if(request.getParameter("submit").equals("Show users")) {
 				//för att visa users
-				
-					for(int ii=0; ii<users.length; ii++) {
-						
-								out.println("User: "+users[ii][1]+" "+users[ii][2]+" --- Personal number: "+users[ii][3]+" <br><br>");
-							
+				for(int ii=0; ii<users.length; ii++) {
+					out.println("User: "+users[ii][1]+" "+users[ii][2]+" --- Personal number: "+users[ii][3]+" <br><br>");
 				}
+					
 					out.print("<form action = \"main.jsp\">\r\n" + 
 							"     	\r\n" + 
 							"         <input type = \"submit\"  value = \"Back To Home\" />\r\n" + 
 							"          \r\n" + 
 							"          \r\n" + 
 							"     </form>");
-			}
-				
-			
+			}	
 	}
 	
 	public void showMedia(HttpServletRequest request, HttpServletResponse response)  throws ServletException, IOException {
@@ -124,10 +119,10 @@ public class servlet extends HttpServlet {
 					System.out.println(" -------- ");
 				}
 				if (check) {
-					out.println("böcker: "+böcker[ii][1]+" ------ Serial number: "+böcker[ii][2]+"  (Borrowed)"+"<br><br>");
+					out.println("böcker: "+böcker[ii][1]+" ------ Serial number: "+böcker[ii][2]+" Categori: "+böcker[ii][3]+"  (Borrowed)"+"<br><br>");
 				}
 				else if (check==false) {
-					out.println("Book: "+böcker[ii][1]+" ------ Serial number: "+böcker[ii][2]+"<br><br>");
+					out.println("Book: "+böcker[ii][1]+" ------ Serial number: "+böcker[ii][2]+" Categori: "+böcker[ii][3]+"<br><br>");
 				}
 					
 			}
@@ -158,10 +153,10 @@ public class servlet extends HttpServlet {
 					
 				}
 				if (check) {
-					out.println("CD: "+cd[ii][1]+" ------ Serial number: "+cd[ii][2]+"  (Borrowed)"+"<br><br>");
+					out.println("CD: "+cd[ii][1]+" ------ Serial number: "+cd[ii][2]+" Categori: "+cd[ii][3]+"  (Borrowed)"+"<br><br>");
 				}
 				else if (check==false) {
-					out.println("CD: "+cd[ii][1]+" ------ Serial number: "+cd[ii][2]+"<br><br>");
+					out.println("CD: "+cd[ii][1]+" ------ Serial number: "+cd[ii][2]+" Categori: "+cd[ii][3]+"<br><br>");
 				}
 					
 			}
@@ -193,10 +188,10 @@ public class servlet extends HttpServlet {
 					
 				}
 				if (check) {
-					out.println("DVD: "+dvd[ii][1]+" ------ Serial number: "+dvd[ii][2]+"  (Borrowed)"+"<br><br>");
+					out.println("DVD: "+dvd[ii][1]+" ------ Serial number: "+dvd[ii][2]+" Categori: "+dvd[ii][3]+"  (Borrowed)"+"<br><br>");
 				}
 				else if (check==false) {
-					out.println("DVD: "+dvd[ii][1]+" ------ Serial number: "+dvd[ii][2]+"<br><br>");
+					out.println("DVD: "+dvd[ii][1]+" ------ Serial number: "+dvd[ii][2]+" Categori: "+dvd[ii][3]+"<br><br>");
 				}
 					
 			}
@@ -219,14 +214,15 @@ public class servlet extends HttpServlet {
 		request.getSession().removeAttribute("dvderror");
 		
 		if(request.getParameter("submit").equals("Add book")) {
-			String name, snum;
+			String name, snum,bookCat;
 			name=request.getParameter("bname");
 			snum= request.getParameter("bsnum");
+			bookCat= request.getParameter("bokCat");
 			
 			Object[][]bookData = db.getData("select * from böcker WHERE serialNummer="+snum+"");
 			
 			if(bookData.length==0) {
-				String SQL=String.format("INSERT INTO böcker(namn,serialNummer) "+"VALUES ('%s','%s');",name,snum);
+				String SQL=String.format("INSERT INTO böcker(namn,serialNummer,kategori) "+"VALUES ('%s','%s','%s');",name,snum,bookCat);
 				try {
 					db.execute(SQL);
 				} catch (SQLException e) {
@@ -245,14 +241,15 @@ public class servlet extends HttpServlet {
 		}
 		
 		if(request.getParameter("submit").equals("Add CD")) {
-			String name, snum;
+			String name, snum,cdCat;
 			name=request.getParameter("cname");
 			snum= request.getParameter("csnum");
+			cdCat= request.getParameter("cdCat");
 			
 			Object[][]cdData = db.getData("select * from cd WHERE serialNummer="+snum+"");
 
 			if(cdData.length==0) {
-				String SQL=String.format("INSERT INTO cd(namn,serialNummer) "+"VALUES ('%s','%s');",name,snum);
+				String SQL=String.format("INSERT INTO cd(namn,serialNummer,kategori) "+"VALUES ('%s','%s','%s');",name,snum,cdCat);
 				try {
 					db.execute(SQL);
 				} catch (SQLException e) {
@@ -271,14 +268,16 @@ public class servlet extends HttpServlet {
 		}
 		
 		if(request.getParameter("submit").equals("Add DVD")) {
-			String name, snum;
+			String name, snum,dvdCat;
 			name=request.getParameter("dname");
 			snum= request.getParameter("dsnum");
+			dvdCat= request.getParameter("dvdCat");
+
 			
 			Object[][]dvdData = db.getData("select * from dvd WHERE serialNummer="+snum+"");
 			
 			if(dvdData.length==0) {
-				String SQL=String.format("INSERT INTO dvd(namn,serialNummer) "+"VALUES ('%s','%s');",name,snum);
+				String SQL=String.format("INSERT INTO dvd(namn,serialNummer,kategori) "+"VALUES ('%s','%s','%s');",name,snum,dvdCat);
 				try {
 					db.execute(SQL);
 				} catch (SQLException e) {

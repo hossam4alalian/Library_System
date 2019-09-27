@@ -29,6 +29,8 @@
          Book's name: <input type = "text" name = "bname">
          <br />
          Book's serial number: <input type = "text" name = "bsnum" maxlength = "11"  onkeypress="isInputNumber(event)"/><br />
+          <br />
+         Book's categorie: <input type = "text" name = "bokCat" maxlength = "30" /><br />
          <input type = "submit" name= "submit" value = "Add book" />
          <div style="color: #FF0000;">${bookerror}</div>
      </form>
@@ -37,6 +39,8 @@
          CD's name: <input type = "text" name = "cname">
          <br />
          CD's serial number: <input type = "text" name = "csnum" maxlength = "11" onkeypress="isInputNumber(event)"/><br />
+         <br />
+         CD's categorie: <input type = "text" name = "cdCat" maxlength = "30" /><br />
          <input type = "submit" name= "submit" value = "Add CD" />
          <div style="color: #FF0000;">${cderror}</div>
      </form>
@@ -45,6 +49,8 @@
          DVD's name: <input type = "text" name = "dname">
          <br />
          DVD's serial number: <input type = "text" name = "dsnum" maxlength = "11" onkeypress="isInputNumber(event)"/><br />
+         <br />
+         DVD's categorie: <input type = "text" name = "dvdcat" maxlength = "30" /><br />
          <input type = "submit" name= "submit" value = "Add DVD" />
          <div style="color: #FF0000;">${dvderror}</div>
      </form>

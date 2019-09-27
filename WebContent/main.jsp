@@ -7,6 +7,23 @@
 <title>Bibliotek</title>
 </head>
 <body>
+
+	<h1>Users</h1>
+	<form action = "servlet" method = "POST">
+         
+         <input type = "submit" name= "submit" value = "Show users" /><br><br>
+     </form>
+	
+
+	<h1>Media in the Library</h1>
+	
+	<form action = "servlet" method = "POST">
+         
+         <input type = "submit" name= "submit" value = "Show books" /><br><br>
+         <input type = "submit" name= "submit" value = "Show CDs" /><br><br>
+         <input type = "submit" name= "submit" value = "Show DVDs" /><br><br>
+     </form>
+	
 	<h1>Add Media</h1>
 	<form action = "servlet" method = "POST">
          Book's name: <input type = "text" name = "bname">
@@ -75,6 +92,23 @@
          <input type = "submit" name= "submit" value = "Show Borrowed Media" />
           
           
+     </form>
+     
+     <h1>Return Media</h1>
+     
+     <form action = "servlet" method = "POST">
+     	
+        Book's Serial Number: <input type = "text" name = "bokSnum" maxlength = "11" onkeypress="isInputNumber(event)"/><br />
+         <input type = "submit" name= "submit" value = "Return book" />
+         <div style="color: #FF0000;">${returnbookerror}</div>
+         <br><br>
+         CD's Serial Number: <input type = "text" name = "cdSnum" maxlength = "11" onkeypress="isInputNumber(event)"/><br />
+         <input type = "submit" name= "submit" value = "Return CD" />
+         <div style="color: #FF0000;">${returncderror}</div>
+         <br><br>
+         DVD's Serial Number: <input type = "text" name = "dvdSnum" maxlength = "11" onkeypress="isInputNumber(event)"/><br />
+         <input type = "submit" name= "submit" value = "Return DVD" />
+         <div style="color: #FF0000;">${returndvderror}</div>
      </form>
      
      
